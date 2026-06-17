@@ -1,0 +1,9 @@
+{
+  "name": "true-to-you-tarot-funnel",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "PORT=4174 node server.js"
+  }
+}

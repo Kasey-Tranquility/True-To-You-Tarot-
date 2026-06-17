@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Video Reading Requests | True to You Tarot</title>
+    <meta name="description" content="Local fulfillment queue for True to You Tarot video reading requests.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css?v=12">
+  </head>
+  <body class="result-page requests-page">
+    <header class="site-header" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="True to You Tarot home">
+        <svg class="brand-mark" viewBox="0 0 56 56" role="img" aria-label="Tranquility inspired mark">
+          <path d="M28 7c8 7 12 14 12 21S36 41 28 49C20 41 16 34 16 28S20 14 28 7Z"></path>
+          <path d="M28 13c-7 3-13 8-18 15 5 7 11 12 18 15 7-3 13-8 18-15-5-7-11-12-18-15Z"></path>
+          <circle cx="28" cy="28" r="4"></circle>
+        </svg>
+        <span>
+          <strong>True to You Tarot</strong>
+          <small>Request queue</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="index.html#pull">Card Pull</a>
+        <a href="index.html#sessions">Sessions</a>
+      </nav>
+      <a class="nav-cta" href="index.html">Site</a>
+    </header>
+
+    <main>
+      <section class="requests-hero" aria-labelledby="requests-title">
+        <div class="section-inner">
+          <p class="section-kicker">Local fulfillment queue</p>
+          <h1 id="requests-title">Video reading requests</h1>
+          <p class="result-lede">
+            Requests saved from the result page appear here. Payment has not been collected yet,
+            so each request needs manual follow-up before recording.
+          </p>
+          <div class="request-summary" data-request-summary>Loading requests...</div>
+          <div class="requests-list" data-requests-list></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const list = document.querySelector("[data-requests-list]");
+      const summary = document.querySelector("[data-request-summary]");
+
+      function formatDate(value) {
+        if (!value) return "No date";
+        return new Intl.DateTimeFormat(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }).format(new Date(value));
+      }
+
+      function renderRequest(request) {
+        const cards = (request.cards || []).map((card) => `
+          <figure class="queue-card">
+            ${card.image ? `<img src="${card.image}" alt="${card.title} tarot card">` : ""}
+            <figcaption>
+              <span>${card.position}</span>
+              <strong>${card.title}</strong>
+            </figcaption>
+          </figure>
+        `).join("");
+
+        return `
+          <article class="request-card">
+            <div class="request-card-main">
+              <p class="mini-label">${formatDate(request.videoRequest?.requestedAt)}</p>
+              <h2>${request.firstName || "New request"}</h2>
+              <p><a href="mailto:${request.email}">${request.email}</a></p>
+              <p class="request-question">${request.question}</p>
+              <div class="result-meta-line">
+                <span>${request.intention}</span>
+                <span>${request.tone}</span>
+                <span>${request.scope === "signature" ? "Deeper pattern" : "Focused question"}</span>
+              </div>
+              <div class="request-actions">
+                <a class="button primary small" href="${request.resultUrl}">Open result</a>
+                <a class="button tertiary small" href="mailto:${request.email}?subject=${encodeURIComponent("$19 personalized card reading video")}&body=${encodeURIComponent(`Hi ${request.firstName || ""},\n\nYour video reading request is saved. Here are the payment and delivery details:\n\n`)}">Send follow-up</a>
+              </div>
+            </div>
+            <div class="queue-card-strip">${cards}</div>
+          </article>
+        `;
+      }
+
+      async function loadRequests() {
+        try {
+          const response = await fetch("/api/video-requests");
+          const payload = await response.json();
+          if (!response.ok) throw new Error(payload.error || "Could not load requests.");
+          const requests = payload.requests || [];
+          summary.textContent = `${requests.length} request${requests.length === 1 ? "" : "s"} waiting for follow-up.`;
+          list.innerHTML = requests.length
+            ? requests.map(renderRequest).join("")
+            : `<article class="request-card empty"><h2>No requests yet.</h2><p>When someone requests a $19 video reading, it will appear here.</p></article>`;
+        } catch (error) {
+          summary.textContent = "Could not load the queue.";
+          list.innerHTML = `<article class="request-card empty"><h2>Queue unavailable.</h2><p>Check that the local server is running.</p></article>`;
+        }
+      }
+
+      loadRequests();
+    </script>
+  </body>
+</html>

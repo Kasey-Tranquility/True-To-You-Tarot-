@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Video Reading Request Is Saved | True to You Tarot</title>
+    <meta
+      name="description"
+      content="Confirmation for your personalized True to You Tarot card reading video."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css?v=13">
+  </head>
+  <body class="result-page success-page">
+    <header class="site-header" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="True to You Tarot home">
+        <svg class="brand-mark" viewBox="0 0 56 56" role="img" aria-label="Tranquility inspired mark">
+          <path d="M28 7c8 7 12 14 12 21S36 41 28 49C20 41 16 34 16 28S20 14 28 7Z"></path>
+          <path d="M28 13c-7 3-13 8-18 15 5 7 11 12 18 15 7-3 13-8 18-15-5-7-11-12-18-15Z"></path>
+          <circle cx="28" cy="28" r="4"></circle>
+        </svg>
+        <span>
+          <strong>True to You Tarot</strong>
+          <small>by Tranquility Wellness</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="index.html#pull">Card Pull</a>
+        <a href="index.html#sessions">Sessions</a>
+      </nav>
+      <a class="nav-cta" href="index.html#sessions">Book</a>
+    </header>
+
+    <main>
+      <section class="success-hero" aria-labelledby="success-title">
+        <div class="section-inner success-grid">
+          <div>
+            <p class="section-kicker">Request saved</p>
+            <h1 id="success-title">Your video reading request is saved.</h1>
+            <p class="result-lede">
+              Kasey will follow up with payment and delivery details before anything is charged.
+              Your question and three-card spread are attached to the request, so the reading can
+              stay specific to the cards you pulled.
+            </p>
+            <div class="result-actions">
+              <a class="button primary" data-return-result href="result.html">Return to my cards</a>
+              <a class="button tertiary" href="index.html#sessions">See private readings</a>
+            </div>
+          </div>
+          <aside class="path-card success-card">
+            <p class="price-label">What happens next</p>
+            <h3>$19</h3>
+            <p>Short private video reading</p>
+            <ul>
+              <li>Your reading ID is saved for follow-up</li>
+              <li>Your three-card spread stays attached to the request</li>
+              <li>No payment has been collected on this page</li>
+              <li>Kasey can confirm payment and delivery details before recording</li>
+            </ul>
+            <p class="path-disclaimer">
+              Reflective spiritual guidance only. No predictions, diagnoses, guarantees, or promised outcomes.
+            </p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="section-inner footer-grid">
+        <p>True to You Tarot with Kasey Goldstraw</p>
+        <p>
+          Your video reading is for spiritual insight, self-reflection, and personal growth.
+          It is not a substitute for licensed professional support.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const id = new URLSearchParams(window.location.search).get("id");
+      const link = document.querySelector("[data-return-result]");
+      if (id && link) link.href = `result.html?id=${encodeURIComponent(id)}#recommendation`;
+    </script>
+  </body>
+</html>
